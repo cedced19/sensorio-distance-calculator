@@ -14,7 +14,6 @@ const char *ssid = "ssid";
 const char *password = "pswd";
 
 void setup() {
-  Serial.begin(115200);
   WiFi.begin(ssid, password);
   pinMode(TRIGGER, OUTPUT);
   digitalWrite(TRIGGER, LOW);
@@ -25,7 +24,6 @@ void setup() {
   }
   WiFi.mode(WIFI_STA);
   pinMode(12,INPUT);
-  Serial.println(WiFi.localIP());
 }
 
 void loop() {
@@ -50,17 +48,12 @@ void loop() {
           m+=values[i];
        }
        m = m/N;
-  
-       Serial.println("");
-       Serial.print(m);
-       Serial.print(" cm");
-
  
        HTTPClient http;
-       http.begin("http://192.168.0.47:8000/"); // specifie the address
+       http.begin("http://192.168.0.40:8888/api/fill-rate-cylinder-value"); // specifie the address
        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
        http.POST("distance=" + String(m));
        http.end();
      }
-     delay(10000);
+     ESP.deepSleep(900000000);
 }
